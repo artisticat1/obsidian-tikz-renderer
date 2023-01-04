@@ -11,6 +11,8 @@ import ErrnoException = NodeJS.ErrnoException;
 
 // import {tex} from "@codemirror/lang-tex";
 
+import { optimize } from "./svgo.browser";
+
 
 interface PluginSettings {
 	latexCommand: string;
@@ -66,6 +68,7 @@ export default class MyPlugin extends Plugin {
 			this.renderTikz2SVG(source).then(async (data: string) => {
 
 				let svg = this.colorSVGinDarkMode(data);
+				svg = await this.optimizeSVG(svg);
 
 				el.innerHTML = svg;
 
@@ -157,6 +160,41 @@ export default class MyPlugin extends Plugin {
 
 		return svg;
 	}
+
+
+	async digestMessage(text: string) {
+		const textAsBuffer = new TextEncoder().encode(text);
+		const hashBuffer = await window.crypto.subtle.digest('SHA-256', textAsBuffer);
+		const hashArray = Array.from(new Uint8Array(hashBuffer))
+		const digest = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+		return digest
+	}
+
+
+	async optimizeSVG(svg: string) {
+		// Optimize the svg using SVGO
+		// We replace IDs in the svg to avoid conflicts across multiple images, leading to errors in the rendering
+		
+		// Use the "prefixIds" plugin to do this
+		// Each svg uses its own unique prefix, given by a hash
+		
+		const prefix = await this.digestMessage(svg);
+
+		return optimize(svg, {plugins:
+			[
+				'preset-default',
+				{
+					name: 'prefixIds',
+					params: {
+					prefix: prefix,
+					},
+				},
+			]
+		// @ts-ignore
+		}).data;
+	}
+
 }
 
 class SettingTab extends PluginSettingTab {
