@@ -67,7 +67,10 @@ export default class MyPlugin extends Plugin {
 
 			this.renderTikz2SVG(source).then(async (data: string) => {
 
-				let svg = this.colorSVGinDarkMode(data);
+				// Tidy the LaTeX source code by e.g. trimming whitespace
+				const source = this.tidyTikzSource(data);
+
+				let svg = this.colorSVGinDarkMode(source);
 				svg = await this.optimizeSVG(svg);
 
 				el.innerHTML = svg;
@@ -154,6 +157,25 @@ export default class MyPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+
+	tidyTikzSource(tikzSource: string) {
+
+		// Remove non-breaking space characters
+		const remove = "&nbsp;";
+		tikzSource = tikzSource.replaceAll(remove, "");
+
+		let lines = tikzSource.split("\n");
+
+		// Trim whitespace that is inserted when pasting in code
+		lines = lines.map(line => line.trim());
+
+		// Remove empty lines
+		lines = lines.filter(line => line);
+
+
+		return lines.join("\n");
 	}
 
 	
