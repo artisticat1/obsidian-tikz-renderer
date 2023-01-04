@@ -1,4 +1,4 @@
-.tikz-render-container {
+/* .tikz-render-container {
 	display: flex;
 }
 
@@ -49,4 +49,21 @@
 
 .tikz-preview-settings-latex-command {
 	width: 100%;
+}
+
+
+.markdown-rendered .block-language-tikzpicture svg {
+    display: block;
+    overflow: visible;
+    margin-left: auto;
+    margin-right: auto;
+} */
+
+.block-language-tikzpicture {
+	display: flex;
+	justify-content: center;
+}
+
+.block-language-tikzpicture svg {
+    overflow: visible;
 }
