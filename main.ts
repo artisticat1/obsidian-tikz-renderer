@@ -64,7 +64,11 @@ export default class MyPlugin extends Plugin {
 			el.innerHTML = '<div class="tikz-preview-rendering">Rendering...</div>';
 
 			this.renderTikz2SVG(source).then(async (data: string) => {
-				el.innerHTML = data;
+
+				let svg = this.colorSVGinDarkMode(data);
+
+				el.innerHTML = svg;
+
 			}).catch((err) => {
 				// console.log(err);
 				el.innerText = err;
@@ -140,6 +144,18 @@ export default class MyPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	
+	colorSVGinDarkMode(svg: string) {
+		// Replace the color "black" with currentColor (the current text color)
+		// so that diagram axes, etc are visible in dark mode
+		// And replace "white" with the background color
+
+		svg = svg.replaceAll(/rgb\(0%,0%,0%\)/g, `currentColor`)
+				.replaceAll(/rgb\(100%,100%,100%\)/g, `var(--background-primary)`);
+
+		return svg;
 	}
 }
 
