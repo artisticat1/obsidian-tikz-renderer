@@ -72,6 +72,13 @@ export default class MyPlugin extends Plugin {
 
 				el.innerHTML = svg;
 
+				// SVG output is too small by default -- scale up by 50%
+				const svgEl = el.firstChild as HTMLElement;
+
+				const scale = 1.4;
+				svgEl.setAttribute("width", (Number(svgEl.getAttribute("width")) * scale).toString());
+				svgEl.setAttribute("height", (Number(svgEl.getAttribute("height")) * scale).toString());
+
 			}).catch((err) => {
 				// console.log(err);
 				el.innerText = err;
