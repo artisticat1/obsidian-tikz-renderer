@@ -110,16 +110,16 @@ export default class MyPlugin extends Plugin {
 	renderTikz2SVG(source: string) {
 
 		// Build latex source code with standalone class
-		const latex_source = `\\documentclass[tikz]{standalone}
-${this.settings.preamble}
-\\begin{document}
-\\begin{tikzpicture}
-  ${source}
-\\end{tikzpicture}
-\\end{document}`;
+// 		const latex_source = `\\documentclass[tikz]{standalone}
+// ${this.settings.preamble}
+// \\begin{document}
+// \\begin{tikzpicture}
+//   ${source}
+// \\end{tikzpicture}
+// \\end{document}`;
 
 		// Render latex
-		return this.renderLatex2SVG(latex_source);
+		return this.renderLatex2SVG(source);
 	}
 
 	renderTikzToContainer(source: string, container: HTMLElement) {
