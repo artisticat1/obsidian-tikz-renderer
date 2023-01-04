@@ -4,9 +4,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {exec, ExecException} from 'child_process';
 import * as temp from 'temp';
-import {keymap} from '@codemirror/view';
-import {basicSetup, EditorState, EditorView} from "@codemirror/basic-setup";
-import {indentWithTab} from "@codemirror/commands"
+// import {keymap} from '@codemirror/view';
+// import {basicSetup, EditorState, EditorView} from "@codemirror/basic-setup";
+// import {indentWithTab} from "@codemirror/commands"
 import ErrnoException = NodeJS.ErrnoException;
 
 // import {tex} from "@codemirror/lang-tex";
@@ -231,21 +231,21 @@ class SettingTab extends PluginSettingTab {
 				"or to define tikz styles that are available in all tikz code blocks."
 			)
 
-		new EditorView({
-			state: EditorState.create({
-				doc: this.plugin.settings.preamble,
-				extensions: [
-					basicSetup,
-					keymap.of([indentWithTab]),
-					EditorView.updateListener.of(async update => {
-						console.log('editor updated', update.state.doc.toString(), update)
-						this.plugin.settings.preamble = update.state.doc.toString();
-						await this.plugin.saveSettings();
-					})
-				],
-			}),
-			parent: preambleSetting.settingEl.parentElement
-		})
+		// new EditorView({
+		// 	state: EditorState.create({
+		// 		doc: this.plugin.settings.preamble,
+		// 		extensions: [
+		// 			basicSetup,
+		// 			keymap.of([indentWithTab]),
+		// 			EditorView.updateListener.of(async update => {
+		// 				console.log('editor updated', update.state.doc.toString(), update)
+		// 				this.plugin.settings.preamble = update.state.doc.toString();
+		// 				await this.plugin.saveSettings();
+		// 			})
+		// 		],
+		// 	}),
+		// 	parent: preambleSetting.settingEl.parentElement
+		// })
 
 		/*
 		 * Timeout
